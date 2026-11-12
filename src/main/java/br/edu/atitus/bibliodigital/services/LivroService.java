@@ -1,0 +1,33 @@
+package br.edu.atitus.bibliodigital.services;
+
+import br.edu.atitus.bibliodigital.entities.Livro;
+import br.edu.atitus.bibliodigital.repositories.LivroRepository;
+
+import java.util.List;
+
+public class LivroService {
+    private final LivroRepository repository = new LivroRepository();
+
+
+    public void inserir(Livro Livro){
+        if (Livro == null)
+            throw new RuntimeException("Objeto Nulo");
+
+        if (Livro.getTitulo() == null || Livro.getTitulo().isBlank())
+            throw new RuntimeException("Titulo Inválido");
+        Livro.setTitulo(Livro.getTitulo().trim());
+        repository.inserir(Livro);
+
+    }
+
+    public List<Livro> findAll(){
+        return repository.findAll();
+    }
+
+    public List<Livro> findByTitulo(String parametro){
+        if (parametro == null || parametro.isBlank())
+            throw new RuntimeException("Parametro Invalido");
+        return repository.findByTitulo(parametro);
+    }
+
+}
