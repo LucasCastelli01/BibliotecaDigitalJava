@@ -30,4 +30,10 @@ public class LivroService {
         return repository.findByTitulo(parametro);
     }
 
+    public List<Livro> findByAutor(String parametro){
+        if (parametro == null || parametro.isBlank())
+            throw new RuntimeException("Parametro Invalido");
+        return repository.findByAutor(parametro);
+    }
+
 }

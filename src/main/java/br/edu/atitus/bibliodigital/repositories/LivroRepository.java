@@ -20,11 +20,23 @@ public class LivroRepository {
     public List<Livro> findByTitulo(String parametro){
             List<Livro> resultado = new ArrayList<>();
         for (Livro livro :acervo){
-               if (livro.getTitulo().toUpperCase().contains(parametro.toUpperCase()));{
+               if (livro.getTitulo().toUpperCase().contains(parametro.toUpperCase())){
                     resultado.add(livro);
             }
         }
         return resultado;
+
+    }
+
+    public List <Livro> findByAutor(String parametro) {
+            List<Livro> resultadoAutor = new ArrayList<>();
+        for (Livro livro: acervo){
+                if (livro.getAutor().toUpperCase().contains(parametro.toUpperCase())){
+                  resultadoAutor.add(livro);
+            }
+        }
+        return resultadoAutor;
+
 
     }
 }
