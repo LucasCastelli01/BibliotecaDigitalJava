@@ -59,4 +59,8 @@ public class LivroRepository {
         acervo.set(indice, livroAtualizado);
     }
 
+    public void remover(int indice){
+        acervo.remove(indice);
+    }
+
 }

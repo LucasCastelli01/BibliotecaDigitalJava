@@ -20,6 +20,7 @@ public class BiblioDigitalApplication {
 
         while (opcao != 0) {
             IO.println("===== Bem vindo ao BiblioDigital =====");
+            IO.println("Menu: ");
             IO.println("1 - Cadastrar novo Livro");
             IO.println("2 - Pesquisar Livro por título");
             IO.println("3 - Pesquisar Livro por autor");
@@ -27,8 +28,12 @@ public class BiblioDigitalApplication {
             IO.println("5 - Excluir Livro");
             IO.println("0 - Sair");
 
+            try {
             opcao = Integer.parseInt(IO.readln("Escolha uma opção: "));
-
+            } catch (NumberFormatException e) {
+                IO.println("Você precisa digitar um Número.");
+                continue;
+            }
             switch (opcao) {
                 case 1 -> {
                     try {
@@ -43,14 +48,14 @@ public class BiblioDigitalApplication {
                         IO.println("2 - Livro Digital");
                         IO.println("3 - AudioLivro");
                         int opcaoLivro = Integer.parseInt(IO.readln("Digite qual desejar: : "));
+
                         Livro novo;
                             if (opcaoLivro == 1) {
                                 int quantExemplares = Integer.parseInt(IO.readln("Quantidade de exemplares: "));
-                                String localizacao = IO.readln("Localização do livro: ");
+                                String localizacao = IO.readln("Localização do livro: ").trim();
                                 novo = new LivroFisico(titulo, autor, anoPublicacao, quantExemplares, localizacao);
                                 service.inserir(novo);
                                 IO.println("Livro físico cadastrado com sucesso!");
-
                                 try {
                                     Thread.sleep(2000);
                                 } catch (InterruptedException e) {
@@ -63,7 +68,7 @@ public class BiblioDigitalApplication {
                                     IO.println(livro);
                                 }
                             } else if (opcaoLivro == 2) {
-                                String formato = IO.readln("Formato do arquivo do livro: ");
+                                String formato = IO.readln("Formato do arquivo do livro: ").trim();
                                 double tamanhoArquivo = Double.parseDouble( IO.readln("Tamanho do arquivo em MB: ") );
                                 novo = new LivroDigital(titulo, autor, anoPublicacao, formato, tamanhoArquivo);
                                 service.inserir(novo);
@@ -74,7 +79,7 @@ public class BiblioDigitalApplication {
                                     Thread.currentThread().interrupt();
                                 }
                             }else if (opcaoLivro == 3) {
-                                String narrador = IO.readln("Narrador do livro: ");
+                                String narrador = IO.readln("Narrador do livro: ").trim();
                                 double duracao = Double.parseDouble( IO.readln("Tempo de duração do áudio: ") );
                                 novo = new AudioLivro(titulo, autor, anoPublicacao, duracao, narrador);
                                 service.inserir(novo);
@@ -165,9 +170,49 @@ public class BiblioDigitalApplication {
                     }
 
                 }
-                case 5 -> IO.println("Exclusão de livro");
-                case 0 -> IO.println("Encerrando o programa");
-                default -> IO.println("Opção inválida");
+            case 5 -> {
+                try {
+                    List<Livro> listaLivros = service.findAll();
+                    if (listaLivros.isEmpty()) {
+                        IO.println("Nenhum livro cadastrado");
+                    } else {
+                        for (int i = 0; i < listaLivros.size(); i++) {
+                            IO.println((i + 1) + " - " + listaLivros.get(i).getTitulo());
+                        }
+                        int indiceEscolhido = Integer.parseInt(IO.readln("Informe o número do livro escolhido: "));
+                        String confirmarExclusao = IO.readln("Confirmar exclusao? s/n");
+
+                        if (confirmarExclusao.equalsIgnoreCase("s")) {
+                            service.remover(indiceEscolhido);
+                            IO.println("Livro removido com sucesso!");
+
+                        } else if (confirmarExclusao.equalsIgnoreCase("n")) {
+                            IO.println("Exclusão cancelada!");
+
+                        }else{
+                            IO.println("Resposta inválida");
+                        }
+
+
+
+
+                    }
+
+
+                }catch (RuntimeException ex){
+                    IO.println("Error:" + ex.getMessage());
+                }
+
+
+
+
+            }
+
+
+
+
+            case 0 -> IO.println("Encerrando o sistema...");
+            default -> IO.println("Opção inválida");
             }
 
         }

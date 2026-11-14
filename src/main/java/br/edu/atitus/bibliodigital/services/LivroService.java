@@ -13,21 +13,13 @@ public class LivroService {
         if (Livro == null)
             throw new RuntimeException("Objeto Nulo");
 
-        if (Livro.getTitulo() == null || Livro.getTitulo().isBlank())
-            throw new RuntimeException("Titulo Inválido");
+        validarDados(Livro.getTitulo(), Livro.getAutor(), Livro.getAnoPublicacao());
         Livro.setTitulo(Livro.getTitulo().trim());
         if (repository.existeTitulo(Livro.getTitulo())) {
             throw new RuntimeException("Titulo ja existente");
         }
-
-        if (Livro.getAutor() == null || Livro.getAutor().isBlank())
-            throw new RuntimeException("Autor Inválido");
         Livro.setAutor(Livro.getAutor().trim());
 
-
-        if (Livro.getAnoPublicacao() < 1900) {
-        throw new RuntimeException("Ano de publicação inválido");
-        }
 
 
 
@@ -62,20 +54,9 @@ public class LivroService {
 
     public void alterar(int indice, String novoTitulo, String novoAutor, int novoAnoPublicacao) {
         Livro escolhido = findByIndice(indice);
-
-        if (novoTitulo == null || novoTitulo.isBlank())
-            throw new RuntimeException("Titulo Invalido");
+        validarDados(novoTitulo, novoAutor, novoAnoPublicacao);
         novoTitulo = novoTitulo.trim();
-
-        if (novoAutor == null || novoAutor.isBlank())
-            throw new RuntimeException("Autor Invalido");
         novoAutor = novoAutor.trim();
-
-        if (novoAnoPublicacao < 1900){
-            throw new RuntimeException("Ano de publicação inválido");
-        }
-
-
 
         for (Livro outroLivro : repository.findAll()) {
             if (outroLivro == escolhido)
@@ -91,6 +72,26 @@ public class LivroService {
         escolhido.setAutor(novoAutor);
         escolhido.setAnoPublicacao(novoAnoPublicacao);
         repository.alterar(indice - 1, escolhido);
+
+    }
+
+
+    public void remover(int indice){
+        int totalLivros = repository.findAll().size();
+
+        if (indice < 1 || indice  > totalLivros)
+            throw new RuntimeException("Indice invalido");
+        repository.remover(indice - 1);
+    }
+
+    private void validarDados (String titulo, String autor, int anoPublicacao){
+
+        if (titulo == null || titulo.isBlank())
+            throw new RuntimeException("Titulo Invalido");
+        if (autor == null || autor.isBlank())
+            throw new RuntimeException("Autor Invalido");
+        if (anoPublicacao < 1900)
+            throw  new RuntimeException("Ano inválido");
 
     }
 
