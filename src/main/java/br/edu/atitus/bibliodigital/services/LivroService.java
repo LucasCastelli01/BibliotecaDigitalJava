@@ -52,4 +52,46 @@ public class LivroService {
         return repository.findByAutor(parametro);
     }
 
+    public Livro findByIndice (int indice){
+        int totalLivros = repository.findAll().size();
+
+        if (indice < 1 || indice  > totalLivros)
+            throw new RuntimeException("Indice invalido");
+        return repository.findByIndice(indice - 1);
+    }
+
+    public void alterar(int indice, String novoTitulo, String novoAutor, int novoAnoPublicacao) {
+        Livro escolhido = findByIndice(indice);
+
+        if (novoTitulo == null || novoTitulo.isBlank())
+            throw new RuntimeException("Titulo Invalido");
+        novoTitulo = novoTitulo.trim();
+
+        if (novoAutor == null || novoAutor.isBlank())
+            throw new RuntimeException("Autor Invalido");
+        novoAutor = novoAutor.trim();
+
+        if (novoAnoPublicacao < 1900){
+            throw new RuntimeException("Ano de publicação inválido");
+        }
+
+
+
+        for (Livro outroLivro : repository.findAll()) {
+            if (outroLivro == escolhido)
+                continue;
+
+            if (novoTitulo.equalsIgnoreCase(outroLivro.getTitulo())) {
+                throw new RuntimeException("Titulo ja existente");
+            }
+
+        }
+
+        escolhido.setTitulo(novoTitulo);
+        escolhido.setAutor(novoAutor);
+        escolhido.setAnoPublicacao(novoAnoPublicacao);
+        repository.alterar(indice - 1, escolhido);
+
+    }
+
 }

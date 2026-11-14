@@ -49,4 +49,14 @@ public class LivroRepository {
         return false;
 
     }
+
+    public Livro findByIndice (int indice){
+        return acervo.get(indice);
+
+    }
+
+    public void alterar(int indice, Livro livroAtualizado) {
+        acervo.set(indice, livroAtualizado);
+    }
+
 }

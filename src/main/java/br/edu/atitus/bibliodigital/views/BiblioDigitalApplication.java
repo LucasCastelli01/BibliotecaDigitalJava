@@ -36,7 +36,7 @@ public class BiblioDigitalApplication {
 
                         String titulo = IO.readln("Digite o Titulo ");
                         String autor = IO.readln("Digite o Autor ");
-                        Integer anoPublicacao = Integer.parseInt(IO.readln("Digite o ano de publicacao: "));
+                        int anoPublicacao = Integer.parseInt(IO.readln("Digite o ano de publicacao: "));
 
                         IO.println("Escolha uma opção:");
                         IO.println("1 - livro físico");
@@ -45,7 +45,7 @@ public class BiblioDigitalApplication {
                         int opcaoLivro = Integer.parseInt(IO.readln("Digite qual desejar: : "));
                         Livro novo;
                             if (opcaoLivro == 1) {
-                                Integer quantExemplares = Integer.parseInt(IO.readln("Quantidade de exemplares: "));
+                                int quantExemplares = Integer.parseInt(IO.readln("Quantidade de exemplares: "));
                                 String localizacao = IO.readln("Localização do livro: ");
                                 novo = new LivroFisico(titulo, autor, anoPublicacao, quantExemplares, localizacao);
                                 service.inserir(novo);
@@ -132,7 +132,39 @@ public class BiblioDigitalApplication {
                     }
                 }
 
-                case 4 -> IO.println("Alteração de livro");
+                case 4 -> {
+                    try {
+                        List<Livro> listaLivros = service.findAll();
+                        if (listaLivros.isEmpty()){
+                            IO.println("Nenhum livro cadastrado");
+                        } else {
+                            for (int i = 0; i < listaLivros.size(); i++) {
+                                IO.println((i + 1) + " - " + listaLivros.get(i).getTitulo());
+                            }
+                            int indiceEscolhido = Integer.parseInt(IO.readln("Informe o número do livro escolhido: "));
+                            Livro livroEscolhido = service.findByIndice(indiceEscolhido);
+                            IO.println(livroEscolhido);
+
+                            String novoTitulo = IO.readln("Novo Título: ");
+                            String novoAutor = IO.readln("Novo Autor: ");
+                            int novoAnoPublicacao = Integer.parseInt(IO.readln("Novo Ano: "));
+
+                            service.alterar(indiceEscolhido, novoTitulo, novoAutor, novoAnoPublicacao);
+
+                            IO.println("Alteração de livro Bem-sucedida");
+                            try {
+                                Thread.sleep(2000);
+                            } catch (InterruptedException e) {
+                                Thread.currentThread().interrupt();
+                            }
+
+
+                        }
+                    } catch (RuntimeException ex) {
+                        IO.println("Error:" + ex.getMessage());
+                    }
+
+                }
                 case 5 -> IO.println("Exclusão de livro");
                 case 0 -> IO.println("Encerrando o programa");
                 default -> IO.println("Opção inválida");

@@ -13,6 +13,8 @@ public final class  LivroFisico extends Livro {
 
     public LivroFisico(String titulo, String autor, int anoPublicacao, int quantidadeExemplares, String localizacao) {
         super(titulo, autor, anoPublicacao);
+        this.quantidadeExemplares = quantidadeExemplares;
+        this.localizacao = localizacao;
     }
 
     public int getQuantidadeExemplares() {
