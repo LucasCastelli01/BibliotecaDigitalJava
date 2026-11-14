@@ -39,4 +39,14 @@ public class LivroRepository {
 
 
     }
+
+    public boolean existeTitulo(String titulo){
+        for (Livro livro: acervo){
+            if (livro.getTitulo().equalsIgnoreCase(titulo)){
+                return true;
+            }
+        }
+        return false;
+
+    }
 }
